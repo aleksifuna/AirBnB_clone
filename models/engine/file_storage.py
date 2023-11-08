@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import json
 from models.base_model import BaseModel
+from models.user import User
 """
 File storage model responsible for serialization and deserialization
 """
@@ -13,6 +14,7 @@ class FileStorage:
 
     __file_path = "file.json"
     __objects = {}
+    Classes = {"BaseModel": BaseModel, "User": User}
 
     def all(self):
         """
@@ -43,11 +45,13 @@ class FileStorage:
         """
         deserializes the JSON file to __objects
         """
-
+        my_dict = {}
         try:
             with open(FileStorage.__file_path, "r", encoding="utf-8") as f:
                 obj_dict = json.load(f)
-                obj_dict = {k: BaseModel(**v) for k, v in obj_dict.items()}
-                FileStorage.__objects = obj_dict
+                for k, v in obj_dict.items():
+                    name, id = k.split(".")
+                    my_dict[k] = self.Classes[name](**v)
+                FileStorage.__objects = my_dict
         except FileNotFoundError:
             pass
