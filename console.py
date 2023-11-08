@@ -4,6 +4,7 @@
 from models.base_model import BaseModel
 from models import storage
 import cmd
+from models.user import User
 
 
 class HBNBCommand(cmd.Cmd):
@@ -12,7 +13,7 @@ class HBNBCommand(cmd.Cmd):
     """
 
     prompt = "(hbnb) "
-    Classes = {"BaseModel": BaseModel}
+    Classes = {"BaseModel": BaseModel, "User": User}
 
     def do_EOF(self, line):
         """EOF command to exit the program"""
