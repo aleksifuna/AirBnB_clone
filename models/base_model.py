@@ -17,7 +17,7 @@ class BaseModel:
         """
         Initializes the class
         """
-        
+
         if kwargs:
             for key, value in kwargs.items():
                 if key == "__class__":
@@ -57,7 +57,7 @@ class BaseModel:
         returns a dictionary representation of the instance
         """
 
-        dict_rep = self.__dict__
+        dict_rep = self.__dict__.copy()
         dict_rep["created_at"] = dict_rep["created_at"].isoformat()
         dict_rep["updated_at"] = dict_rep["updated_at"].isoformat()
         dict_rep["__class__"] = type(self).__name__

@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 import json
-from models.base_model import BaseModel
 
 """
 File storage model responsible for serialization and deserialization
@@ -28,16 +27,13 @@ class FileStorage:
         """
 
         obj_key = f"{type(obj).__name__}.{obj.id}"
-
-        obj_value = BaseModel.to_dict(obj)
-
+        obj_value = obj.to_dict()
         FileStorage.__objects[obj_key] = obj_value
 
     def save(self):
         """
         Serialize an __object in a JSON file
         """
-
         with open(FileStorage.__file_path, "w", encoding="utf-8") as f:
             json.dump(FileStorage.__objects, f)
 
@@ -49,5 +45,5 @@ class FileStorage:
         try:
             with open(FileStorage.__file_path, "r", encoding="utf-8") as f:
                 FileStorage.__objects = json.load(f)
-        except:
+        except FileNotFoundError:
             pass
