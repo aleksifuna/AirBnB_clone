@@ -5,7 +5,7 @@ Place class representation module
 """
 
 
-class User(BaseModel):
+class Place(BaseModel):
     """
     Definition of class place that inherits from BaseModel
     """
