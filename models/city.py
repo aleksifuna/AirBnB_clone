@@ -5,7 +5,7 @@ city class representation module
 """
 
 
-class User(BaseModel):
+class City(BaseModel):
     """
     Definition of class city that inherits from BaseModel
     """
