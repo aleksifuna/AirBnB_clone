@@ -33,7 +33,7 @@ class HBNBCommand(cmd.Cmd):
         return True
 
     do_quit = do_EOF
-    
+
     def emptyline(self):
         pass
 
@@ -52,7 +52,7 @@ class HBNBCommand(cmd.Cmd):
     def do_show(self, line=None):
         """Prints the string representation of an instance """
         """based on the class name and id"""
-        
+
         if line:
             if " " in line:
                 classname, id = line.split()
@@ -63,7 +63,8 @@ class HBNBCommand(cmd.Cmd):
                     all_instance = storage.all()
 
                     if key in all_instance.keys():
-                        print(self.Classes[classname](all_instance[key]))
+                        obj = all_instance[key]
+                        print(obj)
                     else:
                         print(f"** no instance found **")
             else:
@@ -91,7 +92,8 @@ class HBNBCommand(cmd.Cmd):
             print(f"** class name missing **")
 
     def do_all(self, line=None):
-        """Prints all string representation of all instances based or not on the class name"""
+        """Prints all string representation of all
+        instances based or not on the class name"""
         all_instance = storage.all()
         if line:
             if line in self.Classes:
@@ -106,7 +108,8 @@ class HBNBCommand(cmd.Cmd):
                 print(value)
 
     def do_update(self, line):
-        """Updates an instance based on the class name and id by adding or updating attribute"""
+        """Updates an instance based on the class name and id
+        by adding or updating attribute"""
         space_count = 0
         if line:
             for i in line:
@@ -127,31 +130,32 @@ class HBNBCommand(cmd.Cmd):
                     setattr(instance, attr_name, attr_value)
                     instance.save()
 
-                
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    def default(self, line):
+        """Handles commands that are not in do"""
+        if ".all()" in line:
+            command = line.split(".")
+            self.do_all(command[0])
+        elif ".count()" in line:
+            count = 0
+            all_instance = storage.all()
+            for k, v in all_instance.items():
+                if line.split(".")[0] in k:
+                    count += 1
+            print(count)
+        elif ".show(" in line:
+            class_name, rest = line.split(".")
+            if "'" in rest:
+                split_char = "'"
+            else:
+                split_char = '"'
+            rest = rest.split(split_char)
+            if len(rest) >= 3:
+                obj_id = rest[1]
+                self.do_show(class_name + " " + obj_id)
+            else:
+                self.do_show(class_name)
+        else:
+            print(f"*** Unknown command: {line} ***")
 
 
 if __name__ == "__main__":
