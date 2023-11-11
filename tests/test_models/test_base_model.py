@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 from datetime import datetime
 from models.base_model import BaseModel
+from models import storage
 import io
 import unittest
 from unittest.mock import patch
@@ -16,13 +17,13 @@ class TestBaseModel(unittest.TestCase):
 
     def test_basemodel_instance(self):
         """Assert is instance of base model"""
-        
+
         obj = BaseModel()
         self.assertIsInstance(obj, BaseModel)
 
     def test_basemodel_id(self):
         """Assert that id work mormallY"""
-        
+
         obj = BaseModel()
         obj_ids = obj.__dict__
         self.assertIn("id", obj_ids.keys())
@@ -63,7 +64,7 @@ class TestBaseModel(unittest.TestCase):
 
         updated_at = obj_dict["updated_at"]
         self.assertIsInstance(updated_at, datetime)
-    
+
     @patch('sys.stdout', new_callable=io.StringIO)
     def test_basemodel_str(self, mock_stdout):
         """assert that __str__ method returns the correct output"""
@@ -126,8 +127,8 @@ class TestBaseModel(unittest.TestCase):
 
         self.assertEqual(printed_output, expected_output)
 
-        """assert that normal instance creation and kwargs instance are the same"""
-        """reset the mock_stdout"""
+        """assert that normal instance creation and kwargs instance are the
+        same reset the mock_stdout"""
 
         mock_stdout.truncate(0)
         mock_stdout.seek(0)
@@ -140,3 +141,17 @@ class TestBaseModel(unittest.TestCase):
 
         """Assert that __class__ is not present in kwargs instances"""
         self.assertNotIn("__class__", printed_output)
+
+    def test_obj_save(self):
+        """
+        tests method save of Storage class on BaseModel
+        """
+
+        my_obj = BaseModel()
+        storage.save()
+        my_obj_id = my_obj.id
+        all_instances = storage.all()
+        keys = ""
+        for key in all_instances.keys():
+            keys += key
+        self.assertIn(my_obj_id, keys)
