@@ -17,8 +17,9 @@ class BaseModel:
         """
         Initializes the class
         """
-
-        if kwargs:
+        if args:
+            return
+        elif kwargs:
             for key, value in kwargs.items():
                 if key == "__class__":
                     continue
