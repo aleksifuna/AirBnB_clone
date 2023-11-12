@@ -5,5 +5,6 @@ from models.engine.file_storage import FileStorage
 This is an initialization modules
 """
 
+
 storage = FileStorage()
 storage.reload()
