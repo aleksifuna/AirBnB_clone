@@ -124,9 +124,15 @@ class HBNBCommand(cmd.Cmd):
             elif space_count == 3:
                 all_instance = storage.all()
                 classname, id, attr_name, attr_value = line.split()
+                classname = classname.strip('\'"')
+                id = id.strip('\'"')
+                attr_name = attr_name.strip('\'"')
+                attr_value = attr_value.strip('\'"')
+
                 key = classname + "." + id
+
                 if key in all_instance.keys():
-                    instance = self.Classes[classname](all_instance[key])
+                    instance = all_instance[key]
                     setattr(instance, attr_name, attr_value)
                     instance.save()
 
@@ -142,7 +148,7 @@ class HBNBCommand(cmd.Cmd):
                 if line.split(".")[0] in k:
                     count += 1
             print(count)
-        elif ".show(" in line:
+        elif ".show(" in line or ".destroy(" in line:
             class_name, rest = line.split(".")
             if "'" in rest:
                 split_char = "'"
@@ -151,9 +157,32 @@ class HBNBCommand(cmd.Cmd):
             rest = rest.split(split_char)
             if len(rest) >= 3:
                 obj_id = rest[1]
-                self.do_show(class_name + " " + obj_id)
+                if ".show(" in line:
+                    self.do_show(class_name + " " + obj_id)
+                elif ".destroy(":
+                    self.do_destroy(class_name + " " + obj_id)
             else:
                 self.do_show(class_name)
+        elif ".update(" in line:
+            class_name, rest = line.split(".")
+            separator = rest.count(", ")
+            rest = rest.split(", ")
+
+            if separator == 0:
+                if '("' in rest[0]:
+                    obj_id = rest[0].split('(')
+                    self.do_update(class_name + " " + obj_id[1])
+                else:
+                    self.do_update(class_name)
+            elif separator == 1:
+                obj_id = rest[0].split('(')
+                self.do_update(class_name + " " + obj_id[1] + " " + rest[1])
+            elif separator == 2:
+                obj_id = rest[0].split('(')
+                attr_value = rest[2].split(")")
+                self.do_update(f'{class_name} {obj_id[1]} ' +
+                               f'{rest[1]} {attr_value[0]}')
+
         else:
             print(f"*** Unknown command: {line} ***")
 

@@ -127,8 +127,10 @@ class TestBaseModel(unittest.TestCase):
 
         self.assertEqual(printed_output, expected_output)
 
-        """assert that normal instance creation and kwargs instance are the
-        same reset the mock_stdout"""
+        """
+        assert that normal instance creation and kwargs instance are the same
+        """
+        """reset the mock_stdout"""
 
         mock_stdout.truncate(0)
         mock_stdout.seek(0)
