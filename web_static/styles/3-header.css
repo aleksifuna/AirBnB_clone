@@ -6,9 +6,9 @@ header {
 }
 .logo {
     background-image: url("../images/logo.png");
-    width: 100px;
+    width: 200px;
     height: 70px;
     background-size: contain;
     background-repeat: no-repeat;
-    background-position: center;
+    background-position: 20px center;
 }
